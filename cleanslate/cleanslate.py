@@ -1,23 +1,47 @@
-import re
 import csv
-
-class CleanSlateHandler:
-    def __init__(self):
-        self.INAPPROPRIATE_WORD_LIST = []
-        with open("../data/bad-words.csv") as csvfile:
-            reader = csv.reader(csvfile)
-            for row in reader:
-                self.INAPPROPRIATE_WORD_LIST += row
+import re
+import urllib
+import requests
+from bs4 import BeautifulSoup
 
 
-    def searchInappropriateWordsInText(self, text):
-        censorPairs = []
-        for word in self.INAPPROPRIATE_WORD_LIST:
-            censorPairs += [(match.start(), len(word)) for match in re.finditer(word, text)]
-        return censorPairs
+def parseSubmission(submissionURL):
+    submissionPageHTML = requests.get(submissionURL).content
+    submissionParseTree = BeautifulSoup(submissionPageHTML, "html.parser")
+    submissionContent = submissionParseTree.select(".usertext-body > .md p")
+    submissionText = ""
 
-    def censorText(self, text, censorPairs):
-        censoredText = text
-        for pair in censorPairs:
-            censoredText =  censoredText[:pair[0]] + ("-" * pair[1]) + censoredText[pair[0]+pair[1]:]
-        return censoredText
+    for paragraph in submissionContent:
+        submissionText += paragraph.contents[0] + "\n"
+
+    return submissionText
+
+def initInappropriateWordsList():
+    INAPPROPRIATE_WORD_LIST = []
+    with open("../data/bad-words.csv") as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            INAPPROPRIATE_WORD_LIST += row
+    
+    return INAPPROPRIATE_WORD_LIST
+
+def searchInappropriateWordsInText(plaintext):
+    INAPPROPRIATE_WORD_LIST = initInappropriateWordsList()
+    matches = []
+    plaintext = plaintext.lower()
+    for word in INAPPROPRIATE_WORD_LIST:
+        regex = "(?<![^ .,?!;])" + word + "(?![^ .,?!;\r\n])"
+        matches += [(match.start(), word) for match in re.finditer(regex, plaintext)]
+    return matches
+
+def censor(plaintext, matches):
+    censortext = plaintext
+    for match in matches:
+        censortext =  censortext[:match[0]] + ("-" * len(match[1])) + censortext[match[0]+len(match[1]):]
+    return censortext
+
+def handleRequest(URL):
+    plaintext = parseSubmission(URL)
+    matches = searchInappropriateWordsInText(plaintext)
+    censortext = censor(plaintext, matches)
+    return censortext

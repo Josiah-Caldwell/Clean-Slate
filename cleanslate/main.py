@@ -1,12 +1,6 @@
-from cleanslate import CleanSlateHandler
+import cleanslate
 
-text = """
-Good fuckin shit it’s nice to see some good social content on this sub. Seems like everybody’s complaining about not having friends or not enjoying their on campus experience.
-"""
+censortext = cleanslate.handleRequest("https://www.teddit.net/r/virgin/comments/q5nw2e/some_men_are_out_on_tinder_dates_right_now/")
 
-handler = CleanSlateHandler()
-censorPairs = handler.searchInappropriateWordsInText(text)
-censoredText = handler.censorText(text, censorPairs)
+print(censortext)
 
-print(text + "\n\n")
-print(censoredText)
