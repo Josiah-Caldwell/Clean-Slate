@@ -1,6 +1,9 @@
 import cleanslate
+import json
 
-censortext = cleanslate.handleRequest("https://www.teddit.net/r/virgin/comments/q5nw2e/some_men_are_out_on_tinder_dates_right_now/")
+event = {"body": '{"URL":"https://teddit.net/r/college/comments/psd28k/college_is_fun_as_hell/"}'} 
+
+censortext = cleanslate.handleRequest(event, None)
 
 print(censortext)
 

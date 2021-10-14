@@ -2,6 +2,7 @@ import csv
 import re
 import urllib
 import requests
+import json
 from bs4 import BeautifulSoup
 
 
@@ -40,7 +41,9 @@ def censor(plaintext, matches):
         censortext =  censortext[:match[0]] + ("-" * len(match[1])) + censortext[match[0]+len(match[1]):]
     return censortext
 
-def handleRequest(URL):
+def handleRequest(event, context):
+    requestBody = json.loads(event["body"])
+    URL = requestBody["URL"]
     plaintext = parseSubmission(URL)
     matches = searchInappropriateWordsInText(plaintext)
     censortext = censor(plaintext, matches)
