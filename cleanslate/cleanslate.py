@@ -1,10 +1,26 @@
+import boto3
 import csv
-import re
-import urllib
-import requests
 import json
+import re
+import requests
+import urllib
 from bs4 import BeautifulSoup
 
+def initInappropriateWordsList():
+    INAPPROPRIATE_WORD_LIST = []
+    BUCKET_NAME = "cleanslatedata"
+    S3_FILENAME = "bad-words.csv" 
+    LOCAL_FILENAME = "/tmp/bad-words.csv"
+    
+    s3 = boto3.client("s3")
+    s3.download_file(BUCKET_NAME, S3_FILENAME, LOCAL_FILENAME)
+
+    with open(LOCAL_FILENAME) as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            INAPPROPRIATE_WORD_LIST += row
+    
+    return INAPPROPRIATE_WORD_LIST
 
 def parseSubmission(submissionURL):
     submissionPageHTML = requests.get(submissionURL).content
@@ -16,15 +32,6 @@ def parseSubmission(submissionURL):
         submissionText += paragraph.contents[0] + "\n"
 
     return submissionText
-
-def initInappropriateWordsList():
-    INAPPROPRIATE_WORD_LIST = []
-    with open("../data/bad-words.csv") as csvfile:
-        reader = csv.reader(csvfile)
-        for row in reader:
-            INAPPROPRIATE_WORD_LIST += row
-    
-    return INAPPROPRIATE_WORD_LIST
 
 def searchInappropriateWordsInText(plaintext):
     INAPPROPRIATE_WORD_LIST = initInappropriateWordsList()
@@ -47,4 +54,8 @@ def handleRequest(event, context):
     plaintext = parseSubmission(URL)
     matches = searchInappropriateWordsInText(plaintext)
     censortext = censor(plaintext, matches)
-    return censortext
+
+    return {
+        'statusCode': 200,
+        'body': censortext
+    }
