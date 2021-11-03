@@ -1,11 +1,11 @@
 import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import * as CleanSlateCdk from '../lib/clean_slate_cdk-stack';
+import * as CleanSlateCdk from '../lib/CleanSlateStack';
 
 test('Empty Stack', () => {
     const app = new cdk.App();
     // WHEN
-    const stack = new CleanSlateCdk.CleanSlateCdkStack(app, 'MyTestStack');
+    const stack = new CleanSlateCdk.CleanSlateStack(app, 'MyTestStack');
     // THEN
     expectCDK(stack).to(matchTemplate({
       "Resources": {}

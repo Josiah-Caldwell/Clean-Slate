@@ -8,5 +8,5 @@ node_modules
 .cdk.staging
 cdk.out
 
-# Python
-__pycache__
+# Clean Slate lambda resources
+resources/
