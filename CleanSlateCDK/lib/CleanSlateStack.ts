@@ -6,19 +6,37 @@ export class CleanSlateStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Create Clean Slate lambda function
-    const cleanSlateLambda = new lambda.Function(this, 'CleanSlateLambda', {
-      functionName: 'CleanSlate',
+    // Create Clean Slate lambda functions
+    const cleanSlateTitlesLambda = new lambda.Function(this, 'CleanSlateTitlesLambda', {
+      functionName: 'CleanSlateTitlesHandler',
       runtime: lambda.Runtime.PYTHON_3_9,
       code: lambda.Code.fromAsset('resources/clean-slate-lambda-deployment.zip'),
-      handler: 'cleanslate.handleRequest',
+      handler: 'cleanslate.handleTitlesRequest',
       memorySize: 128,
-      timeout: cdk.Duration.seconds(25)
+      timeout: cdk.Duration.seconds(29)
+    });
+    
+    const cleanSlateSubmissionLambda = new lambda.Function(this, 'CleanSlateSubmissionLambda', {
+      functionName: 'CleanSlateSubmissionHandler',
+      runtime: lambda.Runtime.PYTHON_3_9,
+      code: lambda.Code.fromAsset('resources/clean-slate-lambda-deployment.zip'),
+      handler: 'cleanslate.handleSubmissionRequest',
+      memorySize: 128,
+      timeout: cdk.Duration.seconds(29)
+    });
+
+    const cleanSlateCommentsLambda = new lambda.Function(this, 'CleanSlateCommentsLambda', {
+      functionName: 'CleanSlateCommentsHandler',
+      runtime: lambda.Runtime.PYTHON_3_9,
+      code: lambda.Code.fromAsset('resources/clean-slate-lambda-deployment.zip'),
+      handler: 'cleanslate.handleCommentsRequest',
+      memorySize: 128,
+      timeout: cdk.Duration.seconds(29)
     });
 
     // Build Clean Slate API
     const cleanSlateAPI = new apigateway.LambdaRestApi(this, 'CleanSlateAPI', {
-      handler: cleanSlateLambda,
+      handler: cleanSlateSubmissionLambda,
       proxy: false
     });
 
