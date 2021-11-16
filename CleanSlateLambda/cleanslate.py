@@ -33,6 +33,16 @@ def parseSubmission(submissionURL):
 
     return submissionText
 
+def parseTitles(submissionURL):
+    submissionPageHTML = requests.get(submissionURL).content
+    submissionParseTree = BeautifulSoup(submissionPageHTML, "html.parser")
+
+    pageTitle = submissionParseTree.select("head title")[0].contents[0]
+    submissionTitle = submissionParseTree.select("div.title a h2")[0].contents[0]
+
+    titles = (pageTitle, submissionTitle)
+    return titles
+
 def searchInappropriateWordsInText(plaintext):
     INAPPROPRIATE_WORD_LIST = initInappropriateWordsList()
     matches = []
@@ -48,7 +58,26 @@ def censor(plaintext, matches):
         censortext =  censortext[:match[0]] + ("-" * len(match[1])) + censortext[match[0]+len(match[1]):]
     return censortext
 
-def handleRequest(event, context):
+def handleTitleRequest(event, context):
+    requestBody = json.loads(event["body"])
+    URL = requestBody["URL"]
+    titles = parseTitles(URL)
+
+    pageTitleMatches = searchInappropriateWordsInText(titles[0])
+    censoredPageTitle = censor(titles[0], pageTitleMatches)
+
+    submissionTitleMatches = searchInappropriateWordsInText(titles[1])
+    censoredSubmissionTitle = censor(titles[1], submissionTitleMatches)
+
+    return {
+        'statusCode': 200,
+        'body': {
+            'pageTitle': censoredPageTitle,
+            'submissionTitle': censoredSubmissionTitle
+        }
+    }
+
+def handleSubmissionRequest(event, context):
     requestBody = json.loads(event["body"])
     URL = requestBody["URL"]
     plaintext = parseSubmission(URL)
