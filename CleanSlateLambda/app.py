@@ -2,9 +2,9 @@ import cleanslate
 import json
 
 event = {
-    "body": '{"URL":"https://teddit.net/r/college/comments/psd28k/college_is_fun_as_hell/"}'
+    "body": '{"URL":"https://teddit.net/r/AskReddit/comments/qv0wj6/what_is_a_fact_you_know_off_the_top_of_your_head/"}'
 } 
 
-response = cleanslate.handleTitleRequest(event, None)
+response = cleanslate.handleCommentsRequest(event, None)
 
 print(response)

@@ -22,6 +22,19 @@ def initInappropriateWordsList():
     
     return INAPPROPRIATE_WORD_LIST
 
+def parseTitles(submissionURL):
+    submissionPageHTML = requests.get(submissionURL).content
+    submissionParseTree = BeautifulSoup(submissionPageHTML, "html.parser")
+
+    pageTitle = submissionParseTree.select("head title")[0].contents[0]
+    submissionTitle = submissionParseTree.select("div.title a h2")[0].contents[0]
+
+    titles = {
+        "pageTitle": pageTitle, 
+        "submissionTitle": submissionTitle
+    }
+    return titles
+
 def parseSubmission(submissionURL):
     submissionPageHTML = requests.get(submissionURL).content
     submissionParseTree = BeautifulSoup(submissionPageHTML, "html.parser")
@@ -33,15 +46,22 @@ def parseSubmission(submissionURL):
 
     return submissionText
 
-def parseTitles(submissionURL):
+def parseComments(submissionURL):
     submissionPageHTML = requests.get(submissionURL).content
     submissionParseTree = BeautifulSoup(submissionPageHTML, "html.parser")
+    commentElements = submissionParseTree.select(".comments > div.comment")
 
-    pageTitle = submissionParseTree.select("head title")[0].contents[0]
-    submissionTitle = submissionParseTree.select("div.title a h2")[0].contents[0]
-
-    titles = (pageTitle, submissionTitle)
-    return titles
+    comments = []
+    for element in commentElements:
+        commentID = element["id"]
+        commentContent = element.find_all("div", class_="body")[0].p.contents[0]
+        comment = {
+            "id": commentID,
+            "content": commentContent
+        }
+        comments.append(comment)
+    
+    return comments
 
 def searchInappropriateWordsInText(plaintext):
     INAPPROPRIATE_WORD_LIST = initInappropriateWordsList()
@@ -58,16 +78,14 @@ def censor(plaintext, matches):
         censortext =  censortext[:match[0]] + ("-" * len(match[1])) + censortext[match[0]+len(match[1]):]
     return censortext
 
-def handleTitleRequest(event, context):
+def handleTitlesRequest(event, context):
     requestBody = json.loads(event["body"])
     URL = requestBody["URL"]
     titles = parseTitles(URL)
-
-    pageTitleMatches = searchInappropriateWordsInText(titles[0])
-    censoredPageTitle = censor(titles[0], pageTitleMatches)
-
-    submissionTitleMatches = searchInappropriateWordsInText(titles[1])
-    censoredSubmissionTitle = censor(titles[1], submissionTitleMatches)
+    pageTitleMatches = searchInappropriateWordsInText(titles["pageTitle"])
+    censoredPageTitle = censor(titles["pageTitle"], pageTitleMatches)
+    submissionTitleMatches = searchInappropriateWordsInText(titles["submissionTitle"])
+    censoredSubmissionTitle = censor(titles["submissionTitle"], submissionTitleMatches)
 
     return {
         'statusCode': 200,
@@ -87,4 +105,23 @@ def handleSubmissionRequest(event, context):
     return {
         'statusCode': 200,
         'body': censortext
+    }
+
+def handleCommentsRequest(event, context):
+    requestBody = json.loads(event["body"])
+    URL = requestBody["URL"]
+    comments = parseComments(URL)
+
+    censoredComments = []
+    for comment in comments:
+        matches = searchInappropriateWordsInText(comment["content"])
+        censoredComment = {
+            "id": comment["id"],
+            "content": censor(comment["content"], matches)
+        }
+        censoredComments.append(censoredComment)
+    
+    return {
+        'statusCode': 200,
+        'body': censoredComments
     }
