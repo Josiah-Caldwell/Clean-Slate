@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="943ef49f-b5fa-4092-8d79-eee435257157" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/cleanslate/cleanslate.py" beforeDir="false" afterPath="$PROJECT_DIR$/cleanslate/cleanslate.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CleanSlateCDK/lib/CleanSlateStack.ts" beforeDir="false" afterPath="$PROJECT_DIR$/CleanSlateCDK/lib/CleanSlateStack.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +43,8 @@
       <workItem from="1633920870385" duration="599000" />
       <workItem from="1633921529685" duration="1375000" />
       <workItem from="1635283740538" duration="282000" />
+      <workItem from="1636593600425" duration="1041000" />
+      <workItem from="1636596429949" duration="3808000" />
     </task>
     <servers />
   </component>
@@ -48,6 +52,15 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

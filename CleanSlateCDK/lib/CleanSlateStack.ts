@@ -22,7 +22,13 @@ export class CleanSlateStack extends cdk.Stack {
       proxy: false
     });
 
+    const submission = cleanSlateAPI.root.addResource('title');
+    submission.addMethod('POST');
+
     const submission = cleanSlateAPI.root.addResource('submission');
+    submission.addMethod('POST');
+
+    const submission = cleanSlateAPI.root.addResource('comments');
     submission.addMethod('POST');
   }
 }
