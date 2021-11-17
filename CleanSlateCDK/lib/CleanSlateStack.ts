@@ -25,11 +25,11 @@ export class CleanSlateStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(29)
     });
 
-    const cleanSlateCommentsLambda = new lambda.Function(this, 'CleanSlateCommentsLambda', {
-      functionName: 'CleanSlateCommentsHandler',
+    const cleanSlateCommentsLambda = new lambda.Function(this, 'CleanSlateCommentLambda', {
+      functionName: 'CleanSlateCommentHandler',
       runtime: lambda.Runtime.PYTHON_3_9,
       code: lambda.Code.fromAsset('resources/clean-slate-lambda-deployment.zip'),
-      handler: 'cleanslate.handleCommentsRequest',
+      handler: 'cleanslate.handleCommentRequest',
       memorySize: 128,
       timeout: cdk.Duration.seconds(29)
     });
@@ -40,13 +40,13 @@ export class CleanSlateStack extends cdk.Stack {
       proxy: false
     });
 
-    const submission = cleanSlateAPI.root.addResource('title');
-    submission.addMethod('POST');
+    const titleEndpoint = cleanSlateAPI.root.addResource('title');
+    titleEndpoint.addMethod('POST');
 
-    const submission = cleanSlateAPI.root.addResource('submission');
-    submission.addMethod('POST');
+    const submissionEndpoint = cleanSlateAPI.root.addResource('submission');
+    submissionEndpoint.addMethod('POST');
 
-    const submission = cleanSlateAPI.root.addResource('comments');
-    submission.addMethod('POST');
+    const commentEndpoint = cleanSlateAPI.root.addResource('comments');
+    commentEndpoint.addMethod('POST');
   }
 }
