@@ -46,22 +46,18 @@ def parseSubmission(submissionURL):
 
     return submissionText
 
-def parseComments(submissionURL):
+def parseComment(submissionURL, commentID):
     submissionPageHTML = requests.get(submissionURL).content
     submissionParseTree = BeautifulSoup(submissionPageHTML, "html.parser")
-    commentElements = submissionParseTree.select(".comments > div.comment")
+    commentElement = submissionParseTree.select(f"#{commentID}")[0]
 
-    comments = []
-    for element in commentElements:
-        commentID = element["id"]
-        commentContent = element.find_all("div", class_="body")[0].p.contents[0]
-        comment = {
-            "id": commentID,
-            "content": commentContent
-        }
-        comments.append(comment)
+    commentContent = commentElement.find_all("div", class_="body")[0].p.contents[0]
+    comment = {
+        "id": commentID,
+        "content": commentContent
+    }
     
-    return comments
+    return comment
 
 def searchInappropriateWordsInText(plaintext):
     INAPPROPRIATE_WORD_LIST = initInappropriateWordsList()
@@ -107,21 +103,19 @@ def handleSubmissionRequest(event, context):
         'body': censortext
     }
 
-def handleCommentsRequest(event, context):
+def handleCommentRequest(event, context):
     requestBody = json.loads(event["body"])
     URL = requestBody["URL"]
-    comments = parseComments(URL)
+    commentID = requestBody["commentID"]
+    comment = parseComment(URL, commentID)
 
-    censoredComments = []
-    for comment in comments:
-        matches = searchInappropriateWordsInText(comment["content"])
-        censoredComment = {
+    matches = searchInappropriateWordsInText(comment["content"])
+    censoredComment = {
             "id": comment["id"],
             "content": censor(comment["content"], matches)
-        }
-        censoredComments.append(censoredComment)
-    
+    }
+
     return {
         'statusCode': 200,
-        'body': censoredComments
+        'body': censoredComment
     }
