@@ -83,12 +83,14 @@ def handleTitlesRequest(event, context):
     submissionTitleMatches = searchInappropriateWordsInText(titles["submissionTitle"])
     censoredSubmissionTitle = censor(titles["submissionTitle"], submissionTitleMatches)
 
+    responseBody = {
+        'pageTitle': censoredPageTitle,
+        'submissionTitle': censoredSubmissionTitle
+    }      
+
     return {
         'statusCode': 200,
-        'body': {
-            'pageTitle': censoredPageTitle,
-            'submissionTitle': censoredSubmissionTitle
-        }
+        'body': json.dumps(responseBody) 
     }
 
 def handleSubmissionRequest(event, context):
@@ -117,5 +119,5 @@ def handleCommentRequest(event, context):
 
     return {
         'statusCode': 200,
-        'body': censoredComment
+        'body': json.dumps(censoredComment)
     }

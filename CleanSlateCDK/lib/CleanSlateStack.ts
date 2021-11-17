@@ -35,15 +35,15 @@ export class CleanSlateStack extends cdk.Stack {
     });
 
     // Build Clean Slate API
-    const api = new apigateway.RestApi(this, 'CleanSlateAPI');
+    const cleanSlateAPI = new apigateway.RestApi(this, 'CleanSlateAPI');
 
-    const titleEndpoint = cleanSlateAPI.root.addResource('title');
-    titleEndpoint.addMethod('POST', new apigateway.LambdaIntegration(cleanSlateTitlesLambda));
+    const titlesEndpoint = cleanSlateAPI.root.addResource('titles');
+    titlesEndpoint.addMethod('POST', new apigateway.LambdaIntegration(cleanSlateTitlesLambda));
 
     const submissionEndpoint = cleanSlateAPI.root.addResource('submission');
     submissionEndpoint.addMethod('POST', new apigateway.LambdaIntegration(cleanSlateSubmissionLambda));
 
-    const commentEndpoint = cleanSlateAPI.root.addResource('comments');
+    const commentEndpoint = cleanSlateAPI.root.addResource('comment');
     commentEndpoint.addMethod('POST', new apigateway.LambdaIntegration(cleanSlateCommentsLambda));
   }
 }
