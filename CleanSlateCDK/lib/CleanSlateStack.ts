@@ -25,7 +25,7 @@ export class CleanSlateStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(29)
     });
 
-    const cleanSlateCommentsLambda = new lambda.Function(this, 'CleanSlateCommentLambda', {
+    const cleanSlateCommentLambda = new lambda.Function(this, 'CleanSlateCommentLambda', {
       functionName: 'CleanSlateCommentHandler',
       runtime: lambda.Runtime.PYTHON_3_9,
       code: lambda.Code.fromAsset('resources/clean-slate-lambda-deployment.zip'),
@@ -33,17 +33,5 @@ export class CleanSlateStack extends cdk.Stack {
       memorySize: 128,
       timeout: cdk.Duration.seconds(29)
     });
-
-    // Build Clean Slate API
-    const cleanSlateAPI = new apigateway.RestApi(this, 'CleanSlateAPI');
-
-    const titlesEndpoint = cleanSlateAPI.root.addResource('titles');
-    titlesEndpoint.addMethod('POST', new apigateway.LambdaIntegration(cleanSlateTitlesLambda));
-
-    const submissionEndpoint = cleanSlateAPI.root.addResource('submission');
-    submissionEndpoint.addMethod('POST', new apigateway.LambdaIntegration(cleanSlateSubmissionLambda));
-
-    const commentEndpoint = cleanSlateAPI.root.addResource('comment');
-    commentEndpoint.addMethod('POST', new apigateway.LambdaIntegration(cleanSlateCommentsLambda));
   }
 }
