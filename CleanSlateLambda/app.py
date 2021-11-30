@@ -5,6 +5,6 @@ event = {
     "body": '{"URL":"https://teddit.net/r/college/comments/psd28k/college_is_fun_as_hell/", "commentID":"hdr32bh"}'
 } 
 
-response = cleanslate.handleCommentRequest(event, None)
+response = cleanslate.handleTitlesRequest(event, None)
 
 print(response)

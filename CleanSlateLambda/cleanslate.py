@@ -90,6 +90,11 @@ def handleTitlesRequest(event, context):
 
     return {
         'statusCode': 200,
+        'headers': {
+            "Access-Control-Allow-Headers" : "Content-Type",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS,POST"
+        },
         'body': json.dumps(responseBody) 
     }
 
@@ -102,6 +107,11 @@ def handleSubmissionRequest(event, context):
 
     return {
         'statusCode': 200,
+        'headers': {
+            "Access-Control-Allow-Headers" : "Content-Type",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS,POST"
+        },
         'body': censortext
     }
 
@@ -113,11 +123,16 @@ def handleCommentRequest(event, context):
 
     matches = searchInappropriateWordsInText(comment["content"])
     censoredComment = {
-            "id": comment["id"],
-            "content": censor(comment["content"], matches)
+        "id": comment["id"],
+        "content": censor(comment["content"], matches)
     }
 
     return {
         'statusCode': 200,
+        'headers': {
+            "Access-Control-Allow-Headers" : "Content-Type",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS,POST"
+        },
         'body': json.dumps(censoredComment)
     }
