@@ -4,13 +4,12 @@
   "version": "0.01",
   "manifest_version": 3,
   "background": {
-    "service_worker": "background.py"
+    //"service_worker": 
   },
-  "permissions": ["storage"],
+  "permissions": [ "storage",
+                   "tabs" ],
   "action": {
-    "default_popup": "popup.html"
-  },
-  "browser_action": {
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "CS Logo.jpg"
     }

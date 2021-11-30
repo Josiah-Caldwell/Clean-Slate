@@ -2,16 +2,39 @@
 <html>
   <head>
     <link rel="stylesheet" href="cleanslate.css">
+	<script src="./apiCall.js"></script>
   </head>
   <body>
-    <div id="set_password">
-	
+    <div id="set_password" class="hide">
+		<h1>Set Password</h1>
+		<form>
+			<label for="set_password_box">Password:</label>
+			<input type="password" id="set_password_box">
+			<input type="submit" value="submit" id="redirect">
+		</form>
 	</div>
 	<div id="age_selection">
-	
+		<h4>What age is your user?</h4>
+		<form>
+			<input type="radio" id="under_12" name="age_group" value="no_permit">
+			<label for="html"> < 12</label><br>
+			<input type="radio" id="13_15" name="age_group" value="strict_set">
+			<label for="css">13-15</label><br>
+			<input type="radio" id="16_17" name="age_group" value="lax_set">
+			<label for="javascript">16-17</label>
+			<br>
+			<input type="submit" value="submit">
+		</form>
 	</div>
-	<div id="enter_password">
-	
+	<div id="enter_password" class="hide">
+		<form>
+			<input type="password" id="enter_password_box">
+			<input type="submit"value="submit">
+		</form>
+	</div>
+	<div id="launch" class="hide">
+		<button id="start_program">Launch</button>
+		<button id="settings_button">Settings</button>
 	</div>
   </body>
 </html>
