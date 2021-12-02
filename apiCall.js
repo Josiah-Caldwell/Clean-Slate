@@ -51,40 +51,40 @@ function getTitles() {
 }
 
 //Format
-function getComments() {
-    getTabUrl()
-        .then(tabs => {
-            console.log("Get Title")
-            var tab = tabs[0];
-            console.log(tab.url);
-            tabUrl = tab.url;
-            console.log("URL: " + tabUrl)
-            return tabUrl;
-        })
-        .then(tabUrl => {
-            console.log("API Call with URL: " + tabUrl)
-            return fetch(url + commentsEndPoint, {
-                method: 'POST',
-                header: {
-                    "Origin": 'text/plain',
-                    "Content-Type": 'application/json'
-                },
-                body: JSON.stringify({
-                    "URL": tabUrl
-                    "commentID" : //ID of comment changed
-                })
-            });
-        })
-        .then(response => {
-            response.json().then(responseJson => {
-                console.log(responseJson)
-            })
-        });
+//function getComments() {
+//    getTabUrl()
+//        .then(tabs => {
+//            console.log("Get Title")
+//            var tab = tabs[0];
+//            console.log(tab.url);
+//            tabUrl = tab.url;
+//            console.log("URL: " + tabUrl)
+//            return tabUrl;
+//        })
+//        .then(tabUrl => {
+//            console.log("API Call with URL: " + tabUrl)
+//            return fetch(url + commentsEndPoint, {
+//                method: 'POST',
+//                header: {
+//                    "Origin": 'text/plain',
+//                    "Content-Type": 'application/json'
+//                },
+//                body: JSON.stringify({
+//                    "URL": tabUrl
+//                    "commentID" : //ID of comment changed
+//                })
+//            });
+//        })
+//        .then(response => {
+//            response.json().then(responseJson => {
+//                console.log(responseJson)
+//            })
+//        });
 
-}
+//}
 
 //Format
-function getTitles() {
+function getSubmission() {
     getTabUrl()
         .then(tabs => {
             console.log("Get Title")
@@ -108,7 +108,7 @@ function getTitles() {
             });
         })
         .then(response => {
-            response.json().then(responseJson => {
+            response.text().then(responseJson => {
                 console.log(responseJson)
             })
         });
@@ -116,6 +116,7 @@ function getTitles() {
 }
 
 getTitles();
+getSubmission();
 
 //Change Webpage title with API Response JSON obj
 document.getElementsByClassName("title");
