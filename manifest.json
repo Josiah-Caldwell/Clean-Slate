@@ -6,8 +6,11 @@
   "background": {
     //"service_worker": 
   },
-  "permissions": [ "storage",
-                   "tabs" ],
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab"
+  ],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
