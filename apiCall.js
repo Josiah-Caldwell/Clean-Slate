@@ -20,6 +20,7 @@ function getCommentID() {
 }
 
 function getTitles() {
+
     getTabUrl()
         .then(tabs => {
             console.log("Get Title")
@@ -112,14 +113,12 @@ function getSubmission() {
                 console.log(responseJson)
             })
         });
-
 }
 
 getTitles();
 getSubmission();
 
 //Change Webpage title with API Response JSON obj
-document.getElementsByClassName("title");
 
 //Change Webpage Comments based on associated ID
 //Change Submission Content
