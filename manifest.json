@@ -1,7 +1,7 @@
 {
   "name": "Clean Slate",
   "description": "Creating a safer internet for minors!",
-  "version": "0.01",
+  "version": "0.5",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
@@ -18,7 +18,7 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "CS Logo.jpg"
+      "16": "16x16_Clean_Slate_Icon.png"
     }
   }
 }	
